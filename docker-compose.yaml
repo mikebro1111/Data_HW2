@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # Airflow webserver configuration
+  airflow-webserver:
+    extends:
+      file: docker-compose-base.yaml
+      service: airflow-webserver
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+
+  # Airflow scheduler configuration
+  airflow-scheduler:
+    extends:
+      file: docker-compose-base.yaml
+      service: airflow-scheduler
+
+  # Additional services...
+
+  # Custom PostgreSQL database
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: customuser
+      POSTGRES_PASSWORD: custompassword
+      POSTGRES_DB: customdb
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+volumes:
+  db-volume:
